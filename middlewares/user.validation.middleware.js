@@ -18,12 +18,28 @@ function checkAllfields(model, data) {
   );
 }
 
+function checkHasMoreOneProperties(model, data) {
+  for (let property in model) {
+    if (data.hasOwnProperty(property)) return true;
+  }
+  return false;
+}
+
 function checkFormatData(data) {
   if (!data.firstName) {
-    throw { msg: 'Invalid firstName', status: 400 };
+    throw { msg: 'Empty firstName', status: 400 };
   }
   if (!data.lastName) {
-    throw { msg: 'Invalid lastName', status: 400 };
+    throw { msg: 'Empty lastName', status: 400 };
+  }
+  if (!data.email) {
+    throw { msg: 'Empty email', status: 400 };
+  }
+  if (!data.phoneNumber) {
+    throw { msg: 'Empty phone number', status: 400 };
+  }
+  if (!data.password) {
+    throw { msg: 'Empty password', status: 400 };
   }
   if (!checkEmail(data.email)) {
     throw { msg: 'Invalid email', status: 400 };
@@ -36,40 +52,44 @@ function checkFormatData(data) {
   }
 }
 
-function checkEmail(email) {
-  console.log(email);
-  if (email) {
-    let regExp = /^[\w.+\-]+@g(oogle)?mail\.com$/;
-    return regExp.test(email);
-  } else {
-    throw { msg: 'Empty email', status: 400 };
+function checkFormatDataForUpdate(data) {
+  if (data.email) {
+    if (!checkEmail(data.email)) {
+      throw { msg: 'Invalid email', status: 400 };
+    }
   }
+  if (data.phoneNumber) {
+    if (!checkPhoneNumber(data.phoneNumber)) {
+      throw { msg: 'Invalid phone number', status: 400 };
+    }
+  }
+  if (data.password) {
+    if (!checkPassword(data.password)) {
+      throw { msg: 'Invalid password', status: 400 };
+    }
+  }
+}
+
+function checkEmail(email) {
+  let regExp = /^[\w.+\-]+@g(oogle)?mail\.com$/;
+  return regExp.test(email);
 }
 
 function checkPhoneNumber(phoneNumber) {
-  if (phoneNumber) {
-    let regExp = /^\+380[0-9]{7}/i;
-    return regExp.test(phoneNumber);
-  } else {
-    throw { msg: 'Empty phone number', status: 400 };
-  }
+  let regExp = /^\+380[0-9]{7}/i;
+  return regExp.test(phoneNumber);
 }
 
 function checkPassword(password) {
-  if (password) {
-    return !(password.length < 3);
-  } else {
-    throw { msg: 'Empty password', status: 400 };
-  }
+  return !(password.length < 3);
 }
 
 const createUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during creation
-  const userData = req.body;
-
-  const { id, ...otherProperties } = user;
-
   try {
+    const userData = req.body;
+    const { id, ...otherProperties } = user;
+
     if (checkBodyWithOutId(userData)) {
       throw { msg: 'Request must be without id', status: 400 };
     }
@@ -80,6 +100,7 @@ const createUserValid = (req, res, next) => {
       throw { msg: 'Request has not required fields', status: 400 };
     }
     checkFormatData(userData);
+
     next();
   } catch (err) {
     res.status(err.status).json({
@@ -92,13 +113,25 @@ const createUserValid = (req, res, next) => {
 const updateUserValid = (req, res, next) => {
   // TODO: Implement validatior for user entity during update
   try {
-    const id = req.params.id;
+    const paramId = req.params.id;
     const userData = req.body;
+    const { id, ...otherProperties } = user;
 
+    if (!paramId) {
+      throw { msg: 'There is no id in request', status: 400 };
+    }
     if (checkBodyWithOutId(userData)) {
       throw { msg: 'Request must be without id', status: 400 };
     }
-    checkFormatData(userData);
+    if (!checkOfExcessiveProperties(otherProperties, userData)) {
+      throw { msg: 'Request has unnecessary fields', status: 400 };
+    }
+    if (!checkHasMoreOneProperties(otherProperties, userData)) {
+      throw { msg: 'Request has not necessary fields', status: 400 };
+    }
+
+    checkFormatDataForUpdate(userData);
+
     next();
   } catch (err) {
     res.status(err.status).json({

@@ -5,7 +5,7 @@ class UserService {
   // TODO: Implement methods to work with user
   getAll() {
     const users = UserRepository.getAll();
-    return !users.length ? users : null;
+    return users.length ? users : null;
   }
 
   create(data) {
@@ -16,6 +16,8 @@ class UserService {
 
   update(id, data) {
     if (!this.search({ id: id })) return null;
+    if (this.search({ email: data.email })) return null;
+    if (this.search({ phoneNumber: data.phoneNumber })) return null;
     return UserRepository.update(id, data);
   }
 

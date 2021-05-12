@@ -94,7 +94,7 @@ router
       try {
         const user = UserService.update(req.params.id, req.body);
         if (!user) {
-          throw { msg: 'User update error', status: 400 };
+          throw { msg: 'User update error (User with this data exist)', status: 400 };
         } else {
           res.data = user;
         }
