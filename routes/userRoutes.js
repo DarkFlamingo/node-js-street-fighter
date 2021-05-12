@@ -5,7 +5,6 @@ const {
   updateUserValid,
 } = require('../middlewares/user.validation.middleware');
 const { responseMiddleware } = require('../middlewares/response.middleware');
-const e = require('express');
 
 const router = Router();
 
