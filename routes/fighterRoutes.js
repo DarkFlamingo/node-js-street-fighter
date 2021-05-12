@@ -1,25 +1,25 @@
-const { Router } = require("express");
-const FighterService = require("../services/fighterService");
-const { responseMiddleware } = require("../middlewares/response.middleware");
+const { Router } = require('express');
+const FighterService = require('../services/fighterService');
+const { responseMiddleware } = require('../middlewares/response.middleware');
 const {
   createFighterValid,
   updateFighterValid,
-} = require("../middlewares/fighter.validation.middleware");
-const userService = require("../services/userService");
+} = require('../middlewares/fighter.validation.middleware');
+const userService = require('../services/userService');
 
 const router = Router();
 
 // TODO: Implement route controllers for fighter
 router
   .get(
-    "/",
+    '/',
     (req, res, next) => {
       try {
         const fighters = FighterService.getAll();
         if (!fighters) {
           res.data = fighters;
         } else {
-          throw { msg: "No data", status: 400 };
+          throw { msg: 'No data', status: 400 };
         }
       } catch (err) {
         res.err = err;
@@ -31,14 +31,14 @@ router
   )
 
   .get(
-    "/:id",
+    '/:id',
     (req, res, next) => {
       try {
         const fighter = FighterService.search({ id: req.params.id });
         if (!fighter) {
           res.data = fighter;
         } else {
-          throw { msg: "Fighter not found", status: 400 };
+          throw { msg: 'Fighter not found', status: 400 };
         }
       } catch (err) {
         res.err = err;
@@ -50,7 +50,7 @@ router
   )
 
   .delete(
-    "/:id",
+    '/:id',
     (req, res, next) => {
       try {
       } catch (err) {
@@ -58,7 +58,7 @@ router
         if (!fighter) {
           res.data = fighter;
         } else {
-          throw { msg: "There is no fighter with such id", status: 404 };
+          throw { msg: 'There is no fighter with such id', status: 404 };
         }
         res.err = err;
       } finally {
@@ -69,7 +69,7 @@ router
   )
 
   .post(
-    "/",
+    '/',
     createFighterValid,
     (req, res, next) => {
       try {
@@ -77,7 +77,7 @@ router
         if (!fighter) {
           res.data = fighter;
         } else {
-          throw { msg: "Fighter already exist", status: 400 };
+          throw { msg: 'Fighter already exist', status: 400 };
         }
       } catch (err) {
         res.err = err;
@@ -89,7 +89,7 @@ router
   )
 
   .put(
-    "/:id",
+    '/:id',
     updateFighterValid,
     (req, res, next) => {
       try {
@@ -97,7 +97,7 @@ router
         if (!fighter) {
           res.data = fighter;
         } else {
-          throw { msg: "Fighter update error", status: 400 };
+          throw { msg: 'Fighter update error', status: 400 };
         }
       } catch (err) {
         res.err = err;
