@@ -1,16 +1,22 @@
-const { UserRepository } = require('../repositories/userRepository');
+const { UserRepository } = require("../repositories/userRepository");
 
 class UserService {
+  // TODO: Implement methods to work with user
+  getAll() {}
 
-    // TODO: Implement methods to work with user
+  create(data) {}
 
-    search(search) {
-        const item = UserRepository.getOne(search);
-        if(!item) {
-            return null;
-        }
-        return item;
+  update(id, data) {}
+
+  delete(id) {}
+
+  search(search) {
+    const item = UserRepository.getOne(search);
+    if (!item) {
+      return null;
     }
+    return item;
+  }
 }
 
 module.exports = new UserService();
