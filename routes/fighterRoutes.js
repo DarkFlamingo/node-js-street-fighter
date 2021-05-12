@@ -5,7 +5,6 @@ const {
   createFighterValid,
   updateFighterValid,
 } = require('../middlewares/fighter.validation.middleware');
-const userService = require('../services/userService');
 
 const router = Router();
 
