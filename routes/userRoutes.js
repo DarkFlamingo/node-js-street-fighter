@@ -1,25 +1,25 @@
-const { Router } = require("express");
-const UserService = require("../services/userService");
+const { Router } = require('express');
+const UserService = require('../services/userService');
 const {
   createUserValid,
   updateUserValid,
-} = require("../middlewares/user.validation.middleware");
-const { responseMiddleware } = require("../middlewares/response.middleware");
-const e = require("express");
+} = require('../middlewares/user.validation.middleware');
+const { responseMiddleware } = require('../middlewares/response.middleware');
+const e = require('express');
 
 const router = Router();
 
 // TODO: Implement route controllers for user
 router
   .get(
-    "/",
+    '/',
     (req, res, next) => {
       try {
         const users = UserService.getAll();
         if (!users) {
           res.data = users;
         } else {
-          throw { msg: "No data", status: 404 };
+          throw { msg: 'No data', status: 404 };
         }
       } catch (err) {
         res.err = err;
@@ -31,14 +31,14 @@ router
   )
 
   .get(
-    "/:id",
+    '/:id',
     (req, res, next) => {
       try {
         const user = UserService.search({ id: req.params.id });
         if (!user) {
           res.data = user;
         } else {
-          throw { msg: "User not found", status: 404 };
+          throw { msg: 'User not found', status: 404 };
         }
       } catch (err) {
         res.err = err;
@@ -50,14 +50,14 @@ router
   )
 
   .delete(
-    "/:id",
+    '/:id',
     (req, res, next) => {
       try {
         const user = UserService.delete(req.params.id);
         if (!user) {
           res.data = user;
         } else {
-          throw { msg: "There is no user with such id", status: 404 };
+          throw { msg: 'There is no user with such id', status: 404 };
         }
       } catch (err) {
         res.err = err;
@@ -69,7 +69,7 @@ router
   )
 
   .post(
-    "/",
+    '/',
     createUserValid,
     (req, res, next) => {
       try {
@@ -77,7 +77,7 @@ router
         if (!user) {
           res.data = user;
         } else {
-          throw { msg: "User already exist", status: 400 };
+          throw { msg: 'User already exist', status: 400 };
         }
       } catch (err) {
         res.err = err;
@@ -89,7 +89,7 @@ router
   )
 
   .put(
-    "/:id",
+    '/:id',
     updateUserValid,
     (req, res, next) => {
       try {
@@ -97,7 +97,7 @@ router
         if (!user) {
           res.data = user;
         } else {
-          throw { msg: "User update error", status: 400 };
+          throw { msg: 'User update error', status: 400 };
         }
       } catch (err) {
         res.err = err;
