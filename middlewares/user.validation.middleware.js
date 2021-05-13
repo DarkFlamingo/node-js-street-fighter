@@ -1,29 +1,10 @@
 const { user } = require('../models/user');
-
-function checkBodyWithOutId(data) {
-  return data.id;
-}
-
-function checkOfExcessiveProperties(model, data) {
-  for (let property in data) {
-    if (!model.hasOwnProperty(property)) return false;
-  }
-  return true;
-}
-
-function checkAllfields(model, data) {
-  return (
-    JSON.stringify(Object.keys(model).sort()) !==
-    JSON.stringify(Object.keys(data).sort())
-  );
-}
-
-function checkHasMoreOneProperties(model, data) {
-  for (let property in model) {
-    if (data.hasOwnProperty(property)) return true;
-  }
-  return false;
-}
+const {
+  checkBodyWithOutId,
+  checkOfExcessiveProperties,
+  checkAllfields,
+  checkHasMoreOneProperties,
+} = require('../utils/helper');
 
 function checkFormatData(data) {
   if (!data.firstName) {
@@ -53,6 +34,21 @@ function checkFormatData(data) {
 }
 
 function checkFormatDataForUpdate(data) {
+  if (data.firstName === '') {
+    throw { msg: 'Empty firstname', status: 400 };
+  }
+  if (data.lastName === '') {
+    throw { msg: 'Empty lastname', status: 400 };
+  }
+  if (data.email === '') {
+    throw { msg: 'Empty email', status: 400 };
+  }
+  if (data.phoneNumber === '') {
+    throw { msg: 'Empty phone number', status: 400 };
+  }
+  if (data.password === '') {
+    throw { msg: 'Empty password', status: 400 };
+  }
   if (data.email) {
     if (!checkEmail(data.email)) {
       throw { msg: 'Invalid email', status: 400 };
@@ -71,12 +67,12 @@ function checkFormatDataForUpdate(data) {
 }
 
 function checkEmail(email) {
-  let regExp = /^[\w.+\-]+@g(oogle)?mail\.com$/;
+  let regExp = /^[\w.+\-]+@g(oogle)?mail\.com$/g;
   return regExp.test(email);
 }
 
 function checkPhoneNumber(phoneNumber) {
-  let regExp = /^\+380[0-9]{7}/i;
+  let regExp = /^\+380[0-9]{7}/g;
   return regExp.test(phoneNumber);
 }
 
@@ -105,7 +101,7 @@ const createUserValid = (req, res, next) => {
   } catch (err) {
     res.status(err.status).json({
       error: true,
-      msg: err.msg,
+      message: err.msg,
     });
   }
 };
@@ -136,7 +132,7 @@ const updateUserValid = (req, res, next) => {
   } catch (err) {
     res.status(err.status).json({
       error: true,
-      msg: err.msg,
+      message: err.msg,
     });
   }
 };

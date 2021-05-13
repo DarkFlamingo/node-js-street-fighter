@@ -14,6 +14,7 @@ class FighterService {
 
   update(id, data) {
     if (!this.search({ id: id })) return null;
+    if (this.search({ name: data.name })) return null;
     return FighterRepository.update(id, data);
   }
 
