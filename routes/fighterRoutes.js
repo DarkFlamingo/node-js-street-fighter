@@ -5,7 +5,6 @@ const {
   createFighterValid,
   updateFighterValid,
 } = require('../middlewares/fighter.validation.middleware');
-const userService = require('../services/userService');
 
 const router = Router();
 
@@ -17,9 +16,9 @@ router
       try {
         const fighters = FighterService.getAll();
         if (!fighters) {
-          res.data = fighters;
-        } else {
           throw { msg: 'No data', status: 400 };
+        } else {
+          res.data = fighters;
         }
       } catch (err) {
         res.err = err;
@@ -36,9 +35,9 @@ router
       try {
         const fighter = FighterService.search({ id: req.params.id });
         if (!fighter) {
-          res.data = fighter;
-        } else {
           throw { msg: 'Fighter not found', status: 400 };
+        } else {
+          res.data = fighter;
         }
       } catch (err) {
         res.err = err;
@@ -56,9 +55,9 @@ router
       } catch (err) {
         const fighter = FighterService.delete(req.params.id);
         if (!fighter) {
-          res.data = fighter;
-        } else {
           throw { msg: 'There is no fighter with such id', status: 404 };
+        } else {
+          res.data = fighter;
         }
         res.err = err;
       } finally {
@@ -75,9 +74,9 @@ router
       try {
         const fighter = FighterService.create(req.body);
         if (!fighter) {
-          res.data = fighter;
-        } else {
           throw { msg: 'Fighter already exist', status: 400 };
+        } else {
+          res.data = fighter;
         }
       } catch (err) {
         res.err = err;
@@ -95,9 +94,9 @@ router
       try {
         const fighter = FighterService.update(req.params.id, req.body);
         if (!fighter) {
-          res.data = fighter;
-        } else {
           throw { msg: 'Fighter update error', status: 400 };
+        } else {
+          res.data = fighter;
         }
       } catch (err) {
         res.err = err;
