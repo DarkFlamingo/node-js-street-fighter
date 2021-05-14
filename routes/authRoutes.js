@@ -12,11 +12,11 @@ router.post(
       const data = req.body;
       const user = AuthService.login(data);
       if (!user) {
-        throw { msg: 'User not found', status: 400 };
+        throw { msg: 'User not found', status: 404 };
       }
       res.data = user;
     } catch (err) {
-      res.err = err;
+      res.err = { msg: 'User not found', status: 404 };
     } finally {
       next();
     }
